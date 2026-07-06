@@ -6,3 +6,6 @@ venv/
 
 # Models and artifacts
 artifacts/
+
+# Other files
+.DS_Store
