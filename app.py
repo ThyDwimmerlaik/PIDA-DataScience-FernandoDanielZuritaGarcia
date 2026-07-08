@@ -104,7 +104,7 @@ MEJORA_RMSE  = 62.8
 N_SEMANAS_PRED = 4
 
 # Rutas de artefactos
-RUTA_MODELO          = ROOT / "artifacts/modelo_final_xgb.pkl"
+RUTA_MODELO          = ROOT / "artifacts/modelo_final_xgb_tunned.json"
 RUTA_OHE             = ROOT / "artifacts/ohe_tipo_material.pkl"
 RUTA_FEATURES        = ROOT / "artifacts/df_features.parquet"
 RUTA_PREDICCIONES    = ROOT / "artifacts/predicciones_test.parquet"
@@ -259,7 +259,7 @@ def _cargar_historico() -> pd.DataFrame:
         )
 
     # Reconstruir pipeline completo desde CSV
-    df_raw    = cargar_datos(usar_mysql=True, ruta_csv=str(RUTA_CSV))
+    df_raw    = cargar_datos(usar_mysql=False, ruta_csv=str(RUTA_CSV))
     df_semana = construir_grilla_semanal(df_raw)
     df_feat   = agregar_features(df_semana)
     df_feat["tipo_material"] = df_feat["tipo_material"].astype(str)
@@ -370,7 +370,6 @@ def _grafica_serie_total(
         # Punto de conexión (última semana histórica)
         ultimo_hist = hist_total.iloc[[-1]][["periodo_semana", TARGET]] \
                         .rename(columns={TARGET: "pred_demanda"})
-        print(pred_total)
         pred_total = pd.concat([ultimo_hist, pred_total], ignore_index=True)
 
         fig.add_trace(go.Scatter(
