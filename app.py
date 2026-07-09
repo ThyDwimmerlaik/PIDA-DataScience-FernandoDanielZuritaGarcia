@@ -65,6 +65,7 @@ import logging
 import os
 import sys
 from pathlib import Path
+from io import StringIO
 
 import numpy as np
 import pandas as pd
@@ -283,7 +284,7 @@ def _generar_predicciones_futuras(_model, _ohe, df_hist_json: str) -> pd.DataFra
     Genera predicciones para las próximas N_SEMANAS_PRED semanas.
     df_hist_json es la versión JSON del historial (hashable para cache).
     """
-    df_hist = pd.read_json(df_hist_json, orient="split")
+    df_hist = pd.read_json(StringIO(df_hist_json), orient="split")
     df_hist["periodo_semana"] = pd.to_datetime(df_hist["periodo_semana"])
     return predecir_proximas_semanas(
         model=_model,
@@ -983,6 +984,7 @@ def main():
     try:
         model, ohe = _cargar_modelo_y_ohe()
     except FileNotFoundError as exc:
+        logger.error("**Error de configuración:**", exc_info=True)
         st.error(f"**Error de configuración:** {exc}")
         st.stop()
 
@@ -990,9 +992,11 @@ def main():
     try:
         df_hist = _cargar_historico()
     except FileNotFoundError as exc:
+        logger.error("**Error al cargar historial:**", exc_info=True)
         st.error(f"**Error al cargar historial:** {exc}")
         st.stop()
     except Exception as exc:
+        logger.error("**Error inesperado al cargar datos:**", exc_info=True)
         st.error(f"**Error inesperado al cargar datos:** {exc}")
         st.stop()
 
@@ -1001,7 +1005,8 @@ def main():
         df_hist_json = df_hist.to_json(orient="split", date_format="iso")
         df_pred = _generar_predicciones_futuras(model, ohe, df_hist_json)
     except Exception as exc:
-        st.warning(f"No se pudieron generar predicciones futuras: {exc}")
+        logger.error("No se pudieron generar predicciones futuras", exc_info=True)
+        st.warning(f"No se pudieron generar predicciones futuras.")
         df_pred = pd.DataFrame()
 
     # ── Enrutamiento de páginas ──────────────────────────────────────────────
