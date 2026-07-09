@@ -563,7 +563,7 @@ def pagina_resumen(df_hist: pd.DataFrame, df_pred: pd.DataFrame):
     st.markdown('<p class="section-title">Demanda total semanal</p>',
                 unsafe_allow_html=True)
     fig_total = _grafica_serie_total(df_hist, df_pred)
-    st.plotly_chart(fig_total, use_container_width=True)
+    st.plotly_chart(fig_total, width='stretch')
 
     # ── Alertas de stockout ──────────────────────────────────────────────────
     st.markdown('<p class="section-title">Alertas de inventario</p>',
@@ -702,7 +702,7 @@ def pagina_prediccion(df_hist: pd.DataFrame, df_pred: pd.DataFrame):
         unsafe_allow_html=True,
     )
     fig_tipo = _grafica_tipo(df_hist, df_pred, tipo)
-    st.plotly_chart(fig_tipo, use_container_width=True)
+    st.plotly_chart(fig_tipo, width='stretch')
     st.caption(
         f"La banda sombreada representa el intervalo de confianza ±{MAE_MODELO:.1f} unidades "
         f"(MAE del modelo en datos de prueba)."
@@ -719,7 +719,7 @@ def pagina_prediccion(df_hist: pd.DataFrame, df_pred: pd.DataFrame):
     else:
         st.dataframe(
             df_tabla,
-            use_container_width=True,
+            width='stretch',
             hide_index=True,
             column_config={
                 "Semana":            st.column_config.TextColumn("Semana"),
@@ -778,7 +778,7 @@ def pagina_explicabilidad(model):
             hovertemplate="%{y}: %{x:.4f}<extra></extra>",
         ))
         _layout_plotly(fig_fi, "Top 15 features por importancia (ganancia)", alto=420)
-        st.plotly_chart(fig_fi, use_container_width=True)
+        st.plotly_chart(fig_fi, width='stretch')
     except Exception:
         st.info("No se pudo calcular la importancia de features desde el modelo cargado.")
 
@@ -810,7 +810,7 @@ def pagina_explicabilidad(model):
             idx = 0
             if RUTA_SHAP_SUMMARY.exists():
                 with tabs[idx]:
-                    st.image(str(RUTA_SHAP_SUMMARY), use_container_width=True)
+                    st.image(str(RUTA_SHAP_SUMMARY), width='stretch')
                     st.caption(
                         "Izquierda: importancia media absoluta por feature. "
                         "Derecha: dirección e intensidad de impacto en cada predicción."
@@ -818,7 +818,7 @@ def pagina_explicabilidad(model):
                 idx += 1
             if RUTA_SHAP_DEPENDENCE.exists():
                 with tabs[idx]:
-                    st.image(str(RUTA_SHAP_DEPENDENCE), use_container_width=True)
+                    st.image(str(RUTA_SHAP_DEPENDENCE), width='stretch')
                     st.caption(
                         "Relación entre el valor de la feature y su impacto en la predicción. "
                         "El color indica el valor de la feature de interacción automática."
@@ -826,7 +826,7 @@ def pagina_explicabilidad(model):
                 idx += 1
             if RUTA_SHAP_WATERFALL.exists():
                 with tabs[idx]:
-                    st.image(str(RUTA_SHAP_WATERFALL), use_container_width=True)
+                    st.image(str(RUTA_SHAP_WATERFALL), width='stretch')
                     st.caption(
                         "Descomposición de una predicción individual: cada barra muestra "
                         "cuánto sumó o restó cada feature al valor base del modelo."
@@ -885,7 +885,7 @@ def pagina_explicabilidad(model):
 
         st.dataframe(
             df_met,
-            use_container_width=True,
+            width='stretch',
             hide_index=True,
             column_config={
                 "Modelo":          st.column_config.TextColumn("Modelo"),
