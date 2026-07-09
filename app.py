@@ -77,6 +77,7 @@ ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT))
 
 from utils.pipeline import (
+    secure_env,
     cargar_artefactos,
     cargar_datos,
     construir_grilla_semanal,
@@ -604,6 +605,7 @@ def pagina_resumen(df_hist: pd.DataFrame, df_pred: pd.DataFrame):
             data=csv_export.to_csv(index=False).encode("utf-8"),
             file_name="distribudata_predicciones.csv",
             mime="text/csv",
+            disabled=not secure_env,
         )
 
 
@@ -738,6 +740,7 @@ def pagina_prediccion(df_hist: pd.DataFrame, df_pred: pd.DataFrame):
             data=export.to_csv(index=False).encode("utf-8"),
             file_name=f"prediccion_{tipo.lower().replace(' ', '_')}.csv",
             mime="text/csv",
+            disabled=not secure_env,
         )
 
 
@@ -939,6 +942,7 @@ def _sidebar():
         recargar = st.button(
             "🔄  Actualizar datos",
             help="Fuerza la recarga de datos y predicciones.",
+            disabled=not secure_env,
         )
         if recargar:
             st.cache_data.clear()

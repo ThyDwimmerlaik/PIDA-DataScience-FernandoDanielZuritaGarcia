@@ -113,6 +113,9 @@ COLS_FILL_CERO_FEAT   = ["venta", "venta_desc"]   # también en X antes de predi
 # Si no están disponibles, no se aplica winsorización a datos nuevos.
 WINSORIZATION_CAPS: dict[str, dict] = {}
 
+# ── Ambiente ──────────────────────────────────────────────────────────────────
+secure_env = os.environ["SECURE_ENV"] == "True"
+
 # ─────────────────────────────────────────────────────────────────────────────
 # CACHÉ DE MÓDULO (warm Lambda invocations reutilizan estos objetos)
 # ─────────────────────────────────────────────────────────────────────────────
