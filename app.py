@@ -310,8 +310,8 @@ def _layout_plotly(fig: go.Figure, titulo: str = "", alto: int = 380) -> go.Figu
     fig.update_layout(
         title=dict(text=titulo, font=dict(size=14, color=C["navy"]), x=0),
         height=alto,
-        plot_bgcolor="white",
-        paper_bgcolor="white",
+        plot_bgcolor="black",
+        paper_bgcolor="black",
         font=dict(family="system-ui, -apple-system, sans-serif",
                   size=12, color=C["gray"]),
         legend=dict(orientation="h", yanchor="bottom", y=1.02,
@@ -346,7 +346,7 @@ def _grafica_serie_total(
         y=hist_total[TARGET],
         mode="lines",
         name="Demanda real",
-        line=dict(color=C["navy"], width=2),
+        line=dict(color=C["blue"], width=2),
         hovertemplate="<b>%{x|%d %b %Y}</b><br>Real: %{y:,.0f} uds<extra></extra>",
     ))
 
@@ -394,7 +394,7 @@ def _grafica_serie_total(
                          (pred_total["pred_demanda"] - mae_total).clip(0).iloc[::-1]]),
             fill="toself",
             fillcolor="rgba(232,93,4,0.10)",
-            line=dict(color="rgba(0,0,0,0)"),
+            line=dict(color=C["navy"]),
             name="Intervalo ±MAE",
             hoverinfo="skip",
         ))
