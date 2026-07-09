@@ -16,6 +16,7 @@ Variables de entorno opcionales (solo si usar_mysql=True):
 
 from __future__ import annotations
 
+import streamlit as st
 import json
 import logging
 import os
@@ -114,7 +115,7 @@ COLS_FILL_CERO_FEAT   = ["venta", "venta_desc"]   # también en X antes de predi
 WINSORIZATION_CAPS: dict[str, dict] = {}
 
 # ── Ambiente ──────────────────────────────────────────────────────────────────
-secure_env = os.environ["SECURE_ENV"] == "True"
+secure_env = st.secrets["SECURE_ENV"] == "True"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CACHÉ DE MÓDULO (warm Lambda invocations reutilizan estos objetos)
@@ -217,12 +218,12 @@ def _conexion_mysql() -> pymysql.connections.Connection:
     Para producción de alto tráfico, considera RDS Proxy.
     """
     return pymysql.connect(
-        host            = os.environ["DB_HOST"],
-        port            = int(os.getenv("DB_PORT", "3306")),
-        database        = os.environ["DB_NAME"],
-        user            = os.environ["DB_USER"],
-        password        = os.environ["DB_PASSWORD"],
-        connect_timeout = int(os.getenv("DB_CONNECT_TIMEOUT", "5")),
+        host            = st.secrets["DB_HOST"],
+        port            = int(st.secrets["DB_PORT"]),
+        database        = st.secrets["DB_NAME"],
+        user            = st.secrets["DB_USER"],
+        password        = st.secrets["DB_PASSWORD"],
+        connect_timeout = int(st.secrets["DB_CONNECT_TIMEOUT"]),
         read_timeout    = 30,
         write_timeout   = 30,
         charset         = "utf8mb3",
